@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "jadx-analyzer": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "/path/to/jadx_directory/target/jadx-mcp-server-1.0.0-jar-with-dependencies.jar"
+      ],
+      "env": {
+        "JAVA_HOME": "${JAVA_HOME}",
+        "PATH": "${PATH}:/usr/bin:/usr/local/bin"
+      }
+    }
+  }
+}
