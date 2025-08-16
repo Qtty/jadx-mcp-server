@@ -171,6 +171,66 @@ public class JadxApkAnalyzerAPI {
         }
     }
     
+    /**
+     * Get all resource file names in the APK
+     */
+    public List<String> getAllResourceFileNames() throws Exception {
+        checkLoaded();
+        try {
+            return core.getAllResourceFileNames();
+        } catch (RuntimeException e) {
+            throw new Exception(e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get content of a specific resource file
+     */
+    public String getResourceFile(String fileName) throws Exception {
+        checkLoaded();
+        try {
+            String content = core.getResourceFile(fileName);
+            if (content == null) {
+                throw new Exception("Resource file not found: " + fileName);
+            }
+            return content;
+        } catch (RuntimeException e) {
+            throw new Exception(e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get smali code of a specific class
+     */
+    public String getSmaliOfClass(String className) throws Exception {
+        checkLoaded();
+        try {
+            String smali = core.getSmaliOfClass(className);
+            if (smali == null) {
+                throw new Exception("Class not found or smali not available: " + className);
+            }
+            return smali;
+        } catch (RuntimeException e) {
+            throw new Exception(e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get smali code of a specific method
+     */
+    public String getSmaliOfMethod(String className, String methodName) throws Exception {
+        checkLoaded();
+        try {
+            String smali = core.getSmaliOfMethod(className, methodName);
+            if (smali == null) {
+                throw new Exception("Method not found or smali not available: " + methodName + " in class " + className);
+            }
+            return smali;
+        } catch (RuntimeException e) {
+            throw new Exception(e.getMessage(), e);
+        }
+    }
+    
     private void checkLoaded() throws Exception {
         if (core == null || !core.isLoaded()) {
             throw new Exception("No APK loaded. Call loadApk() first.");

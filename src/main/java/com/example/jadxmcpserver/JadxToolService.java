@@ -124,4 +124,48 @@ public class JadxToolService {
             return "Error: " + e.getMessage();
         }
     }
+    
+    @Tool(name = "get_all_resource_file_names", description = "Get list of all resource file names in the APK")
+    public List<String> getAllResourceFileNames() {
+        try {
+            logger.info("Getting all resource file names");
+            return analyzer.getAllResourceFileNames();
+        } catch (Exception e) {
+            logger.severe("Error getting resource file names: " + e.getMessage());
+            return List.of("Error: " + e.getMessage());
+        }
+    }
+    
+    @Tool(name = "get_resource_file", description = "Get the content of a specific resource file")
+    public String getResourceFile(String fileName) {
+        try {
+            logger.info("Getting resource file: " + fileName);
+            return analyzer.getResourceFile(fileName);
+        } catch (Exception e) {
+            logger.severe("Error getting resource file: " + e.getMessage());
+            return "Error: " + e.getMessage();
+        }
+    }
+    
+    @Tool(name = "get_smali_of_class", description = "Get the smali code of a specific class")
+    public String getSmaliOfClass(String className) {
+        try {
+            logger.info("Getting smali for class: " + className);
+            return analyzer.getSmaliOfClass(className);
+        } catch (Exception e) {
+            logger.severe("Error getting class smali: " + e.getMessage());
+            return "Error: " + e.getMessage();
+        }
+    }
+    
+    @Tool(name = "get_smali_of_method", description = "Get the smali code of a specific method")
+    public String getSmaliOfMethod(String className, String methodName) {
+        try {
+            logger.info("Getting smali for method: " + className + "." + methodName);
+            return analyzer.getSmaliOfMethod(className, methodName);
+        } catch (Exception e) {
+            logger.severe("Error getting method smali: " + e.getMessage());
+            return "Error: " + e.getMessage();
+        }
+    }
 }

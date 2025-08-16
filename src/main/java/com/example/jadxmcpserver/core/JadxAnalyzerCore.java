@@ -487,6 +487,29 @@ public class JadxAnalyzerCore {
         return null;
     }
     
+    private String extractMethodSmali(String classSmali, String methodName) {
+        String[] lines = classSmali.split("\n");
+        StringBuilder methodSmali = new StringBuilder();
+        boolean inMethod = false;
+        boolean foundMethod = false;
+        
+        for (String line : lines) {
+            // Look for method declaration
+            if (line.contains(".method ") && line.contains(" " + methodName + "(")) {
+                inMethod = true;
+                foundMethod = true;
+                methodSmali.append(line).append("\n");
+            } else if (inMethod && line.contains(".end method")) {
+                methodSmali.append(line).append("\n");
+                break;
+            } else if (inMethod) {
+                methodSmali.append(line).append("\n");
+            }
+        }
+        
+        return foundMethod ? methodSmali.toString() : null;
+    }
+    
     private Set<CallGraphNode> findTargetMethods(String targetMethod) {
         Set<CallGraphNode> targetNodes = new HashSet<>();
         
@@ -752,6 +775,92 @@ public class JadxAnalyzerCore {
         return sb.toString();
     }
     
+    /**
+     * Get all resource file names in the APK
+     */
+    public List<String> getAllResourceFileNames() {
+        checkLoaded();
+        List<String> resourceNames = new ArrayList<>();
+        
+        List<ResourceFile> resources = jadx.getResources();
+        for (ResourceFile resource : resources) {
+            resourceNames.add(resource.getOriginalName());
+        }
+        
+        Collections.sort(resourceNames);
+        return resourceNames;
+    }
+    
+    /**
+     * Get content of a specific resource file
+     */
+    public String getResourceFile(String fileName) {
+        checkLoaded();
+        
+        List<ResourceFile> resources = jadx.getResources();
+        for (ResourceFile resource : resources) {
+            if (resource.getOriginalName().equals(fileName)) {
+                try {
+                    ResContainer resContainer = resource.loadContent();
+                    if (resContainer != null) {
+                        ICodeInfo codeInfo = resContainer.getText();
+                        if (codeInfo != null) {
+                            return codeInfo.toString();
+                        } else if (resContainer.getDecodedData() != null) {
+                            return new String(resContainer.getDecodedData());
+                        }
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Error loading resource file: " + fileName + " - " + e.getMessage(), e);
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Get smali code of a specific class
+     */
+    public String getSmaliOfClass(String className) {
+        checkLoaded();
+        
+        for (JavaClass javaClass : jadx.getClasses()) {
+            if (javaClass.getFullName().equals(className)) {
+                try {
+                    return javaClass.getSmali();
+                } catch (Exception e) {
+                    throw new RuntimeException("Error getting smali for class: " + className + " - " + e.getMessage(), e);
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Get smali code of a specific method
+     */
+    public String getSmaliOfMethod(String className, String methodName) {
+        checkLoaded();
+        
+        for (JavaClass javaClass : jadx.getClasses()) {
+            if (javaClass.getFullName().equals(className)) {
+                try {
+                    String classSmali = javaClass.getSmali();
+                    if (classSmali != null) {
+                        return extractMethodSmali(classSmali, methodName);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Error getting smali for method: " + methodName + " in class: " + className + " - " + e.getMessage(), e);
+                }
+                break;
+            }
+        }
+        
+        return null;
+    }
+
     /**
      * Close the analyzer and free resources
      */
