@@ -19,7 +19,7 @@
     
     <properties>
         <java.version>11</java.version>
-        <jadx.version>1.4.7</jadx.version>
+        <jadx.version>1.5.2</jadx.version>
         <spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
     </properties>
 
