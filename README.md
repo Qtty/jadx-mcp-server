@@ -24,6 +24,8 @@ This project implements an MCP server that wraps the powerful JADX decompiler, m
 - **Method Search**: Search for specific methods across all classes
 - **Manifest Analysis**: Parse and analyze AndroidManifest.xml content
 - **Main Activity Detection**: Identify the application's entry point
+- **Resource File Analysis**: Access and analyze APK resource files (layouts, strings, etc.)
+- **Bytecode Analysis**: Extract smali (bytecode) representations for low-level analysis
 - **MCP Integration**: Seamless integration with AI assistants through MCP protocol
 
 ## Architecture
@@ -115,6 +117,16 @@ Once running, the server provides these MCP tools:
 - **`get_android_manifest`** - Get the AndroidManifest.xml content
 - **`get_main_activity_class`** - Get the main launcher activity class
 
+### Resource Analysis Tools
+
+- **`get_all_resource_file_names`** - Get list of all resource file names in the APK
+- **`get_resource_file`** - Get content of a specific resource file (XML layouts, strings, etc.)
+
+### Bytecode Analysis Tools
+
+- **`get_smali_of_class`** - Get smali (bytecode) representation of a specific class
+- **`get_smali_of_method`** - Get smali (bytecode) representation of a specific method
+
 ## Usage Examples
 
 ### Basic APK Analysis with Claude
@@ -137,6 +149,16 @@ Once running, the server provides these MCP tools:
 4. **Security Analysis**:
    ```
    Check for exported components and potential security issues
+   ```
+
+5. **Resource Analysis**:
+   ```
+   Show me all resource files in the APK and get the content of strings.xml
+   ```
+
+6. **Bytecode Analysis**:
+   ```
+   Get the smali bytecode for the MainActivity class to analyze low-level implementation
    ```
 
 ### Command Line Testing
@@ -226,6 +248,8 @@ This tool is designed for **defensive security analysis only**:
 - ✅ Security research
 - ✅ Code review and analysis
 - ✅ Malware analysis (defensive)
+- ✅ Bytecode analysis for security auditing
+- ✅ Resource file inspection for hardcoded secrets
 - ❌ Creating malicious modifications
 - ❌ Bypassing security controls
 - ❌ Unauthorized application modification
