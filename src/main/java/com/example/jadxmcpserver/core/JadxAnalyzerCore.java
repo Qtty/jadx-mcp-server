@@ -10,6 +10,7 @@ import jadx.api.JavaField;
 import jadx.api.ResourceFile;
 import jadx.api.ICodeInfo;
 import jadx.core.xmlgen.ResContainer;
+import jadx.zip.IZipEntry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -801,13 +802,13 @@ public class JadxAnalyzerCore {
         for (ResourceFile resource : resources) {
             if (resource.getOriginalName().equals(fileName)) {
                 try {
-                    ResContainer resContainer = resource.loadContent();
-                    if (resContainer != null) {
-                        ICodeInfo codeInfo = resContainer.getText();
-                        if (codeInfo != null) {
-                            return codeInfo.toString();
-                        } else if (resContainer.getDecodedData() != null) {
-                            return new String(resContainer.getDecodedData());
+                    // Try using getZipEntry first
+                    IZipEntry zipEntry = resource.getZipEntry();
+                    if (zipEntry != null) {
+                        // Read data directly from zip entry
+                        byte[] data = zipEntry.getInputStream().readAllBytes();
+                        if (data != null) {
+                            return new String(data, "UTF-8");
                         }
                     }
                 } catch (Exception e) {
