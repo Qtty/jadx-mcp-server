@@ -126,10 +126,7 @@ Once running, the server provides these MCP tools:
 
 ## Demo
 
-<video width="800" controls>
-  <source src="misc/poc.mp4" type="video/mp4">
-  Your browser does not support the video tag. You can <a href="misc/poc.mp4">download the demo video</a> instead.
-</video>
+https://github.com/user-attachments/assets/9c93c16a-5f42-4d57-a4a2-87975735bd91
 
 *JADX MCP Server in action analyzing Android APKs with Claude*
 
