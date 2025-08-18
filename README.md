@@ -127,6 +127,15 @@ Once running, the server provides these MCP tools:
 - **`get_smali_of_class`** - Get smali (bytecode) representation of a specific class
 - **`get_smali_of_method`** - Get smali (bytecode) representation of a specific method
 
+## Demo
+
+<video width="800" controls>
+  <source src="misc/poc.mp4" type="video/mp4">
+  Your browser does not support the video tag. You can <a href="misc/poc.mp4">download the demo video</a> instead.
+</video>
+
+*JADX MCP Server in action analyzing Android APKs with Claude*
+
 ## Usage Examples
 
 ### Basic APK Analysis with Claude
@@ -135,6 +144,8 @@ Once running, the server provides these MCP tools:
    ```
    Please analyze this APK file: /path/to/app.apk
    ```
+   
+   *Note: A test APK (DIVA) is available in the `misc/` directory for testing purposes.*
 
 2. **Examine Classes**:
    ```
