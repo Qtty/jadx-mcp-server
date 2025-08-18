@@ -80,13 +80,10 @@ Add the MCP server to your Claude Desktop configuration (`claude_desktop_config.
     "jadx-analyzer": {
       "command": "java",
       "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
         "-jar",
-        "/path/to/jadx-mcp-server/target/jadx-mcp-server-1.0.0-jar-with-dependencies.jar"
-      ],
-      "env": {
-        "JAVA_HOME": "${JAVA_HOME}",
-        "PATH": "${PATH}:/usr/bin:/usr/local/bin"
-      }
+        "/path/to/jadx-mcp-server/target/jadx-mcp-server-1.0.0.jar"
+      ]
     }
   }
 }
