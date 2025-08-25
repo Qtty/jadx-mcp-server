@@ -55,4 +55,9 @@ public class JadxMcpServerApplication {
         logger.info("Registered " + provider.getToolCallbacks() + " tool callbacks");
         return provider;
     }
+
+    @Bean
+    public JadxApkAnalyzerAPI jadxApkAnalyzerAPI() {
+        return new JadxApkAnalyzerAPI();
+    }
 }
