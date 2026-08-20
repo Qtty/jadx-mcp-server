@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath />
+    </parent>
+    
+    <groupId>com.example</groupId>
+    <artifactId>jadx-mcp-server</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    
+    <properties>
+        <java.version>11</java.version>
+        <jadx.version>1.5.6</jadx.version>
+        <!-- See the surefire plugin below: measured, not chosen. -->
+        <testHeap>24g</testHeap>
+    </properties>
+
+    <repositories>
+
+
+
+        
+        <!-- Google Maven Repository for Android dependencies -->
+        <repository>
+            <id>google</id>
+            <name>Google Maven Repository</name>
+            <url>https://maven.google.com</url>
+        </repository>
+        
+        <!-- Maven Central -->
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- JADX Core -->
+        <dependency>
+            <groupId>io.github.skylot</groupId>
+            <artifactId>jadx-core</artifactId>
+            <version>${jadx.version}</version>
+        </dependency>
+        
+        <!-- JADX Dex Input -->
+        <dependency>
+            <groupId>io.github.skylot</groupId>
+            <artifactId>jadx-dex-input</artifactId>
+            <version>${jadx.version}</version>
+        </dependency>
+        
+        <!-- Add Android build tools dependency that JADX needs -->
+        <dependency>
+            <groupId>com.android.tools.build</groupId>
+            <artifactId>aapt2-proto</artifactId>
+            <version>7.3.1-8691043</version>
+        </dependency>
+
+        <!-- JUnit 5 + AssertJ + Spring test support. The pre-existing "tests" were
+             main()-based scripts with no framework behind them. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!--
+              The test JVM's heap, stated rather than inherited.
+
+              Surefire reuses one fork for every test class, and eleven of them
+              load the 141,461-class reference APK in turn. Each load is a large
+              transient working set; close() releases it, but the peak is set by
+              how many the collector has not got to yet. Without this the budget
+              was HotSpot's ergonomic default, a fraction of whatever machine
+              happened to run it (16,500,391,936 bytes on the box this was
+              measured on), so the suite passed or ran out of memory according
+              to the developer's RAM. That is exactly the kind of unstated
+              environment dependency the tests themselves are being audited for.
+
+              Measured 2026-08-08: at the ergonomic 16.5 GB the run died with
+              java.lang.OutOfMemoryError after 22 of 30 classes; at 24 GB it
+              completes 277 tests in 30 classes with none skipped. Override with
+              -DtestHeap=... on a smaller machine, and expect to have to run the
+              big-APK classes separately if you go far below.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-Xmx${testHeap}</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

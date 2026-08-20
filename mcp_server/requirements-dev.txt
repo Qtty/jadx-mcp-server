@@ -1,0 +1,9 @@
+# Test dependencies, on top of requirements.txt.
+#
+#   .venv/bin/pip install -r mcp_server/requirements-dev.txt
+#   .venv/bin/pytest mcp_server/tests/ -q
+#
+# test_concurrency.py additionally needs a running daemon with an APK loaded;
+# it skips itself when there isn't one.
+-r requirements.txt
+pytest==8.3.5
